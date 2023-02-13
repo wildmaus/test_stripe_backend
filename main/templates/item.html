@@ -1,0 +1,21 @@
+<head>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript">
+        function proccessBuy() {
+            let stripe = Stripe('pk_test_51MakcBHqwtE4jwNdhVaSggBDbO1S4oM75rndkrQHZlfruABLMMnVxzK48xMWSOHAxqcGUpc3WvS3EJoHvcH6lloa00O1DNLLxr')
+            fetch("/buy/{{ item.pk }}/")
+                .then(response => { return response.json() })
+                .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
+        }
+    </script>
+</head>
+
+<body>
+    <h1> Item {{ item.pk }}</h1>
+    <div>
+        <h3>{{ item.name }}</h3>
+        <p>Price: {{ item.price }}$</p>
+        <p>Description: {{ item.description }}</p>
+        <button onclick="proccessBuy()">Buy</button>
+    </div>
+</body>
