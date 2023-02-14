@@ -1,1 +1,0 @@
-web: gunicorn test_stripe.wsgi
