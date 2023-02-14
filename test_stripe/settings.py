@@ -71,9 +71,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'test_stripe.wsgi.application'
-CSRF_TRUSTED_ORIGINS = os.getenv(
-    "CSRF_TRUSTED_ORIGINS", "localhost").split(" ")
-
+CSRF_TRUSTED_ORIGINS = [os.getenv(
+    "CSRF_TRUSTED_ORIGINS")]
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
