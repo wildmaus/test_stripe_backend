@@ -3,4 +3,3 @@ venv/
 /*/migrations/
 /*/*/migrations/
 __pycache__
-static/
