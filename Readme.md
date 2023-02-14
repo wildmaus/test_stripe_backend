@@ -1,11 +1,16 @@
 # Test stripe backend
 Бекенд интегрированный с Stripe Api
 ### Функционал
-- Пользователь может получить инофрмацию о Item и перейти на страницу оплаты в stripe
-- Пользователь может получить session id для оплаты Item в stripe
-- Пользователь может добавлять новые Item через django admin
+- Пользователь может получить инофрмацию о Item и добавлять их в Order
+- Пользователь может получить session id для оплаты Order в stripe
+- Пользователь может менять количество/удалять Item в Order
+- Админ может добавлять новые Item через django admin
 ### Запуск
 Для запуска заполните .env в соответствии с env.example, после чего
 ```bash
 docker compose up --build app -d
+```
+Для создания суперпользователя
+```bash
+docker exec -it <containter id> python manage.py createsuperuser
 ```
