@@ -9,4 +9,4 @@ COPY requirements.txt /app/requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . /app
-CMD ["gunicorn", "test_stripe.wsgi"]
+CMD ["python", "manage.py", "collectstatic", "&&", "gunicorn", "test_stripe.wsgi"]
