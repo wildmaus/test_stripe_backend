@@ -38,7 +38,7 @@ def create_session(id):
         } for orderItem in order.orderItems.all()],
         mode="payment",
         success_url="http://" +
-        settings.ALLOWED_HOSTS[0]+":8000/" +
+        settings.ALLOWED_HOSTS[0]+"/" +
         reverse("success", kwargs={"id": id}),
     )
     order.status = "in_progress"
