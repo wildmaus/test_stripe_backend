@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-fluid">
+    <h2>Order {{ currentOrder.pk }}:</h2>
+    <h5>Status: {{ currentOrder.status }}</h5>
+    {% if currentOrder.orderItems.count %}
+    {% if currentOrder.status != "new" %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for orderItems in currentOrder.orderItems.all %}
+            <tr>
+                <th scope="row">{{ orderItems.item.name }}</th>
+                <td>{{ orderItems.item.price }} cents</td>
+                <td>{{ orderItems.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for orderItems in currentOrder.orderItems.all %}
+            <tr>
+                <th scope="row">{{ orderItems.item.name }}</th>
+                <td>{{ orderItems.item.price }} cents</td>
+                <td>
+                    <form class="row g-2" action="{% url 'change_quantity' currentOrder.pk orderItems.item.pk %}"
+                        method="POST">
+                        {% csrf_token %}
+                        <div class="col-auto">
+                            <input type="number" class="form-control" name="quantity" value="{{ orderItems.quantity }}"
+                                min="1" style="width: 70px;">
+                        </div>
+                        <div class="col-auto">
+                            <input type="submit" class="btn btn-primary" value="Change amount">
+                        </div>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'delete' currentOrder.pk orderItems.item.pk %}" method="POST">
+                        {% csrf_token %}
+                        <input type="submit" class="btn btn-danger" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="d-grid gap-2">
+        <button type="button" class="btn btn-outline-success" onclick="proccessBuy()">Buy</button>
+    </div>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script type="text/javascript">
+        function proccessBuy() {
+            let stripe = Stripe('pk_test_51MakcBHqwtE4jwNdhVaSggBDbO1S4oM75rndkrQHZlfruABLMMnVxzK48xMWSOHAxqcGUpc3WvS3EJoHvcH6lloa00O1DNLLxr')
+            fetch("/buy/{{ currentOrder.pk }}/")
+                .then(response => { return response.json() })
+                .then(session => stripe.redirectToCheckout({ sessionId: session.id }))
+        }
+    </script>
+    {% endif %}
+    {% else %}
+    <div>
+        <strong>Your order is empty!</strong>
+        <a href="{% url 'items' %}" class="btn btn-outline-dark">Add some Items?</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock content %}
